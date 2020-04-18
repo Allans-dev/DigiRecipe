@@ -6,8 +6,10 @@ import {
   Button,
   FlatList,
   StyleSheet,
+  Image,
 } from "react-native";
 import getRecipes from "../api/fetch";
+import Globe from "../components/globe";
 
 const DATA = [
   {
@@ -26,19 +28,11 @@ const DATA = [
 
 const URL = "https://jsonplaceholder.typicode.com/comments";
 
-const Globe = ({ id, title, onSelect }) => {
-  return (
-    <TouchableOpacity onPress={() => onSelect(id)} style={styles.globeItem}>
-      <Text>{title}</Text>
-    </TouchableOpacity>
-  );
-};
-
-const Recipe = ({ title, body }) => {
+const Recipe = ({ name, body }) => {
   return (
     <View style={styles.recipeItem}>
-      <Text>title: {title}</Text>
-      <Text>{body}</Text>
+      <Text>name: {name}</Text>
+      <Text>body: {body}</Text>
     </View>
   );
 };
@@ -74,6 +68,7 @@ const HomeScreen = () => {
             title={item.title}
             selected={selected}
             onSelect={onSelect}
+            uri={item.title}
           />
         )}
         keyExtractor={(item) => item.id}
@@ -85,7 +80,7 @@ const HomeScreen = () => {
         data={recipes}
         renderItem={({ item }) =>
           item.postId === selected ? (
-            <Recipe title={item.title} body={item.body} />
+            <Recipe name={item.name} body={item.body} />
           ) : null
         }
         keyExtractor={(item) => item.id}
@@ -104,13 +99,6 @@ const styles = StyleSheet.create({
   },
   globes: {
     flex: 4,
-    borderWidth: 1,
-  },
-  globeItem: {
-    borderRadius: 400,
-    borderWidth: 1,
-    width: 280,
-    height: 280,
   },
   recipe: {
     flex: 1,
