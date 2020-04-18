@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import {
   View,
   Text,
@@ -8,28 +8,36 @@ import {
   StyleSheet,
 } from "react-native";
 import Constants from "expo-constants";
-// import getRecipes from "../api/fetch";
+import getRecipes from "../api/fetch";
 
 const DATA = [
   {
-    id: "bd7acbea-c1b1-46c2-aed5-3ad53abb28ba",
+    id: 1,
     title: "First Item",
   },
   {
-    id: "3ac68afc-c605-48d3-a4f8-fbd91aa97f63",
+    id: 2,
     title: "Second Item",
   },
   {
-    id: "58694a0f-3da1-471f-bd96-145571e29d72",
+    id: 3,
     title: "Third Item",
   },
 ];
 
-const Globe = ({ title }) => {
+const URL = "https://jsonplaceholder.typicode.com/comments";
+
+const Globe = ({ id, title, selected, onSelect }) => {
   return (
-    <View style={styles.globeItem}>
+    <TouchableOpacity
+      onPress={() => onSelect(id)}
+      style={[
+        styles.globeItem,
+        { backgroundColor: selected ? "#6e3b6e" : "#f9c2ff" },
+      ]}
+    >
       <Text>{title}</Text>
-    </View>
+    </TouchableOpacity>
   );
 };
 
@@ -44,13 +52,21 @@ const Recipe = ({ title, body }) => {
 
 const HomeScreen = () => {
   const [recipes, setRecipes] = useState([]);
+  const [selected, setSelected] = useState(new Map());
 
   useEffect(() => {
-    fetch("https://jsonplaceholder.typicode.com/posts")
-      .then((res) => res.json())
-      .then((json) => setRecipes(json))
-      .catch((error) => console.error(error));
+    getRecipes(URL, setRecipes);
   }, []);
+
+  const onSelect = useCallback(
+    (id) => {
+      const newSelected = new Map(selected);
+      newSelected.set(id, !selected.get(id));
+
+      setSelected(newSelected);
+    },
+    [selected]
+  );
 
   return (
     <View style={styles.root}>
@@ -60,8 +76,16 @@ const HomeScreen = () => {
         showsHorizontalScrollIndicator={false}
         style={styles.globes}
         data={DATA}
-        renderItem={({ item }) => <Globe title={item.title} />}
+        renderItem={({ item }) => (
+          <Globe
+            id={item.id}
+            title={item.title}
+            selected={!!selected.get(item.id)}
+            onSelect={onSelect}
+          />
+        )}
         keyExtractor={(item) => item.id}
+        extraData={selected}
       ></FlatList>
       <FlatList
         style={styles.recipe}
