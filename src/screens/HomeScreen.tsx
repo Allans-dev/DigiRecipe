@@ -7,7 +7,6 @@ import {
   FlatList,
   StyleSheet,
 } from "react-native";
-import Constants from "expo-constants";
 import getRecipes from "../api/fetch";
 
 const DATA = [
@@ -27,15 +26,9 @@ const DATA = [
 
 const URL = "https://jsonplaceholder.typicode.com/comments";
 
-const Globe = ({ id, title, selected, onSelect }) => {
+const Globe = ({ id, title, onSelect }) => {
   return (
-    <TouchableOpacity
-      onPress={() => onSelect(id)}
-      style={[
-        styles.globeItem,
-        { backgroundColor: selected ? "#6e3b6e" : "#f9c2ff" },
-      ]}
-    >
+    <TouchableOpacity onPress={() => onSelect(id)} style={styles.globeItem}>
       <Text>{title}</Text>
     </TouchableOpacity>
   );
@@ -52,7 +45,7 @@ const Recipe = ({ title, body }) => {
 
 const HomeScreen = () => {
   const [recipes, setRecipes] = useState([]);
-  const [selected, setSelected] = useState(new Map());
+  const [selected, setSelected] = useState(null);
 
   useEffect(() => {
     getRecipes(URL, setRecipes);
@@ -60,13 +53,12 @@ const HomeScreen = () => {
 
   const onSelect = useCallback(
     (id) => {
-      const newSelected = new Map(selected);
-      newSelected.set(id, !selected.get(id));
-
-      setSelected(newSelected);
+      setSelected(id);
     },
     [selected]
   );
+
+  console.log(selected);
 
   return (
     <View style={styles.root}>
@@ -80,7 +72,7 @@ const HomeScreen = () => {
           <Globe
             id={item.id}
             title={item.title}
-            selected={!!selected.get(item.id)}
+            selected={selected}
             onSelect={onSelect}
           />
         )}
@@ -91,9 +83,11 @@ const HomeScreen = () => {
         style={styles.recipe}
         showVerticalScrollIndicator={false}
         data={recipes}
-        renderItem={({ item }) => (
-          <Recipe title={item.title} body={item.body} />
-        )}
+        renderItem={({ item }) =>
+          item.postId === selected ? (
+            <Recipe title={item.title} body={item.body} />
+          ) : null
+        }
         keyExtractor={(item) => item.id}
       ></FlatList>
     </View>
@@ -102,7 +96,6 @@ const HomeScreen = () => {
 
 const styles = StyleSheet.create({
   root: {
-    // marginTop: Constants.statusBarHeight,
     flex: 1,
     borderWidth: 1,
   },
