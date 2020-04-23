@@ -8,25 +8,10 @@ import {
   StyleSheet,
   Image,
 } from "react-native";
-import getRecipes from "../api/fetch";
+import { getRecipes, foodGroups } from "../api/fetch";
 import Globe from "../components/globe";
 
-const DATA = [
-  {
-    id: 1,
-    title: "First Item",
-  },
-  {
-    id: 2,
-    title: "Second Item",
-  },
-  {
-    id: 3,
-    title: "Third Item",
-  },
-];
-
-const URL = "https://jsonplaceholder.typicode.com/comments";
+const GET_RECIPE_URL: String = "https://jsonplaceholder.typicode.com/comments";
 
 const Recipe = ({ name, body }) => {
   return (
@@ -42,7 +27,7 @@ const HomeScreen = () => {
   const [selected, setSelected] = useState(null);
 
   useEffect(() => {
-    getRecipes(URL, setRecipes);
+    getRecipes(GET_RECIPE_URL, setRecipes);
   }, []);
 
   const onSelect = useCallback(
@@ -61,14 +46,13 @@ const HomeScreen = () => {
         horizontal={true}
         showsHorizontalScrollIndicator={false}
         style={styles.globes}
-        data={DATA}
+        data={foodGroups}
         renderItem={({ item }) => (
           <Globe
             id={item.id}
-            title={item.title}
+            title={item.group}
             selected={selected}
             onSelect={onSelect}
-            uri={item.title}
           />
         )}
         keyExtractor={(item) => item.id}
@@ -95,6 +79,8 @@ const styles = StyleSheet.create({
     borderWidth: 1,
   },
   logo: {
+    borderWidth: 1,
+    backgroundColor: "green",
     flex: 0.5,
   },
   globes: {
