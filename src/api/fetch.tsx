@@ -1,11 +1,11 @@
-const getRecipes = async (URL, setRecipes) => {
+const getRecipes: object = async (URL, setRecipes) => {
   return fetch(URL)
     .then((res) => res.json())
     .then((json) => setRecipes(json))
     .catch((error) => console.error(error));
 };
 
-const foodGroups = [
+const foodGroups: object[] = [
   {
     id: 1,
     group: "Main Meal",

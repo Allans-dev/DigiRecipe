@@ -10,37 +10,83 @@ import {
 } from "react-native";
 import images from "../../assets/imgs/imgList.js";
 
-const Globe = ({ id, title, onSelect, selected }) => {
-  let imageUri = [];
+export interface GlobeProps {
+  id: number;
+  title: string;
+  onSelect: void;
+  selected: number;
+}
+
+const Globe: React.FC<GlobeProps> = ({ id, title, onSelect, selected }) => {
+  let imageUri: object[] = [];
+  const foodGroups: object = images.foodGroups;
   switch (title) {
     case "Main Meal":
+      const mainMeal = foodGroups.mainMeal;
       imageUri = [
-        images.foodGroups.mainMeal.ramen,
-        images.foodGroups.mainMeal.pizza,
-        images.foodGroups.mainMeal.chicken,
-        images.foodGroups.mainMeal.burger,
+        mainMeal.ramen,
+        mainMeal.pizza,
+        mainMeal.chicken,
+        mainMeal.burger,
       ];
       break;
     case "Breakfast":
-      imageUri = ["qwr", "gtf", "rgetfh", "fergf"];
+      const breakfast = foodGroups.breakfast;
+      imageUri = [
+        breakfast.eggs,
+        breakfast.pancakes,
+        breakfast.frenchToast,
+        breakfast.bigBrekkie,
+      ];
       break;
     case "Sides":
-      imageUri = ["qwr", "gtf", "rgetfh", "fergf"];
+      const sides = foodGroups.sides;
+      imageUri = [sides.mash, sides.kimchi, sides.hummus, sides.soup];
       break;
     case "Salads":
-      imageUri = ["qwr", "gtf", "rgetfh", "fergf"];
+      const salads = foodGroups.salads;
+      imageUri = [
+        salads.thaiSalad,
+        salads.caesar,
+        salads.fruit,
+        salads.vegetableSalad,
+      ];
       break;
     case "Snacks":
-      imageUri = ["qwr", "gtf", "rgetfh", "fergf"];
+      const snacks = foodGroups.snacks;
+      imageUri = [
+        snacks.chips,
+        snacks.cookies,
+        snacks.bananaBread,
+        snacks.rolls,
+      ];
       break;
     case "Desserts":
-      imageUri = ["qwr", "gtf", "rgetfh", "fergf"];
+      const desserts = foodGroups.desserts;
+      imageUri = [
+        desserts.cake,
+        desserts.iceCream,
+        desserts.pie,
+        desserts.souffle,
+      ];
       break;
     case "Drinks":
-      imageUri = ["qwr", "gtf", "rgetfh", "fergf"];
+      const drinks = foodGroups.drinks;
+      imageUri = [
+        drinks.coffee,
+        drinks.smoothie,
+        drinks.cocktail,
+        drinks.sangria,
+      ];
       break;
     default:
-      imageUri = [images.foodGroups.mainMeal.pizza, "gtf", "rgetfh", "fergf"];
+      const defaultImg = images.foodGroups.mainMeal;
+      imageUri = [
+        defaultImg.ramen,
+        defaultImg.pizza,
+        defaultImg.chicken,
+        defaultImg.burger,
+      ];
       break;
   }
 

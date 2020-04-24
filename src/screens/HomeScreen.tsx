@@ -11,7 +11,7 @@ import {
 import { getRecipes, foodGroups } from "../api/fetch";
 import Globe from "../components/globe";
 
-const GET_RECIPE_URL: String = "https://jsonplaceholder.typicode.com/comments";
+const GET_RECIPE_URL: string = "https://jsonplaceholder.typicode.com/comments";
 
 const Recipe = ({ name, body }) => {
   return (
@@ -22,7 +22,7 @@ const Recipe = ({ name, body }) => {
   );
 };
 
-const HomeScreen = () => {
+const HomeScreen: React.FC = () => {
   const [recipes, setRecipes] = useState([]);
   const [selected, setSelected] = useState(null);
 
@@ -30,7 +30,7 @@ const HomeScreen = () => {
     getRecipes(GET_RECIPE_URL, setRecipes);
   }, []);
 
-  const onSelect = useCallback(
+  const onSelect: void = useCallback(
     (id) => {
       setSelected(id);
     },
@@ -76,18 +76,18 @@ const HomeScreen = () => {
 const styles = StyleSheet.create({
   root: {
     flex: 1,
+    backgroundColor: "#c45465",
     borderWidth: 1,
   },
   logo: {
     borderWidth: 1,
-    backgroundColor: "green",
-    flex: 0.5,
+    flex: 0.2,
   },
   globes: {
     flex: 4,
   },
   recipe: {
-    flex: 1,
+    flex: 10,
   },
   recipeItem: {
     borderWidth: 1,
