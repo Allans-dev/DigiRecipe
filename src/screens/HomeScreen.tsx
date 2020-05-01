@@ -22,7 +22,7 @@ const Recipe = ({ name, body }) => {
   );
 };
 
-const HomeScreen: React.FC = () => {
+const HomeScreen: React.FC = ({ navigation }) => {
   const [recipes, setRecipes] = useState([]);
   const [selected, setSelected] = useState(null);
 
@@ -58,6 +58,14 @@ const HomeScreen: React.FC = () => {
         keyExtractor={(item) => item.id}
         extraData={selected}
       ></FlatList>
+      <TouchableOpacity
+        style={styles.new}
+        onPress={() => {
+          navigation.navigate("AddNew");
+        }}
+      >
+        <Text>Add New Recipe</Text>
+      </TouchableOpacity>
       <FlatList
         style={styles.recipe}
         showVerticalScrollIndicator={false}
@@ -76,7 +84,7 @@ const HomeScreen: React.FC = () => {
 const styles = StyleSheet.create({
   root: {
     flex: 1,
-    backgroundColor: "#c45465",
+    backgroundColor: "#8AC7BC",
     borderWidth: 1,
   },
   logo: {
@@ -85,6 +93,13 @@ const styles = StyleSheet.create({
   },
   globes: {
     flex: 4,
+  },
+  new: {
+    flex: 0.15,
+    alignItems: "center",
+    justifyContent: "center",
+    borderWidth: 1,
+    backgroundColor: "#87B9D4",
   },
   recipe: {
     flex: 10,
