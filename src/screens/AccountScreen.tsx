@@ -9,10 +9,10 @@ import {
   Image,
 } from "react-native";
 
-const AddNewScreen = ({ navigation }) => {
+const AccountScreen = ({ navigation }) => {
   return (
     <View>
-      <Text h2>Add New Screen</Text>
+      <Text h2>Account</Text>
     </View>
   );
 };
@@ -21,4 +21,4 @@ const styles = StyleSheet.create({
   root: {},
 });
 
-export default AddNewScreen;
+export default AccountScreen;
