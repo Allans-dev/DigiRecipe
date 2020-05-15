@@ -11,14 +11,18 @@ import {
 
 const LoginScreen = ({ navigation }) => {
   return (
-    <View>
+    <View style={styles.root}>
       <Text h2>Login Screen</Text>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  root: {},
+  root: {
+    flex: 1,
+    alignItems: "center",
+    paddingTop: 50,
+  },
 });
 
 export default LoginScreen;

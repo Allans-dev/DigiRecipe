@@ -11,28 +11,44 @@ import {
 import { getRecipes, foodGroups } from "../api/fetch";
 import Globe from "../components/globe";
 
-const GET_RECIPE_URL: string = "https://jsonplaceholder.typicode.com/comments";
+const GET_RECIPE_URL: string =
+  "https://digirecipe-server.herokuapp.com/recipes";
 
-const Recipe = ({ name, body }) => {
+const Recipe = ({ name, ingredients }) => {
   return (
     <View style={styles.recipeItem}>
       <Text>name: {name}</Text>
-      <Text>body: {body}</Text>
+      <Text>body: {ingredients}</Text>
     </View>
   );
 };
 
 const HomeScreen: React.FC = ({ navigation }) => {
-  const [recipes, setRecipes] = useState([]);
+  const [recipes, setRecipes] = useState([
+    {
+      name: "Omlette",
+      group: "Breakfast",
+      ingredients: "eggs",
+      method: null,
+      notes: null,
+    },
+  ]);
   const [selected, setSelected] = useState(null);
 
   useEffect(() => {
-    getRecipes(GET_RECIPE_URL, setRecipes);
+    try {
+      async () => {
+        const response = await getRecipes(GET_RECIPE_URL, "GET");
+        const json = setRecipes(response);
+      };
+    } catch (error) {
+      console.log("error in effect");
+    }
   }, []);
 
   const onSelect: void = useCallback(
-    (id) => {
-      setSelected(id);
+    (title) => {
+      setSelected(title);
     },
     [selected]
   );
@@ -41,7 +57,9 @@ const HomeScreen: React.FC = ({ navigation }) => {
 
   return (
     <View style={styles.root}>
-      <View style={styles.logo}></View>
+      <View style={styles.logo}>
+        <Text>DigiRecipe</Text>
+      </View>
       <FlatList
         horizontal={true}
         showsHorizontalScrollIndicator={false}
@@ -49,7 +67,7 @@ const HomeScreen: React.FC = ({ navigation }) => {
         data={foodGroups}
         renderItem={({ item }) => (
           <Globe
-            id={item.id}
+            id={item.group}
             title={item.group}
             selected={selected}
             onSelect={onSelect}
@@ -58,24 +76,18 @@ const HomeScreen: React.FC = ({ navigation }) => {
         keyExtractor={(item) => item.id}
         extraData={selected}
       ></FlatList>
-      <TouchableOpacity
-        style={styles.new}
-        onPress={() => {
-          navigation.navigate("AddNew");
-        }}
-      >
-        <Text>Add New Recipe</Text>
-      </TouchableOpacity>
       <FlatList
         style={styles.recipe}
         showVerticalScrollIndicator={false}
         data={recipes}
         renderItem={({ item }) =>
-          item.postId === selected ? (
-            <Recipe name={item.name} body={item.body} />
-          ) : null
+          item.group === selected ? (
+            <Recipe name={item.name} ingredients={item.ingredients} />
+          ) : (
+            <Text>Your Recipes will show here</Text>
+          )
         }
-        keyExtractor={(item) => item.id}
+        keyExtractor={(item) => item.name + item.ingredients}
       ></FlatList>
     </View>
   );
@@ -89,7 +101,9 @@ const styles = StyleSheet.create({
   },
   logo: {
     borderWidth: 1,
-    flex: 0.2,
+    flex: 0.5,
+    alignItems: "center",
+    paddingTop: 50,
   },
   globes: {
     flex: 4,

@@ -11,14 +11,18 @@ import {
 
 const AddNewScreen = ({ navigation }) => {
   return (
-    <View>
-      <Text h2>Add New Screen</Text>
+    <View style={styles.root}>
+      <Text>Add New Recipe</Text>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  root: {},
+  root: {
+    flex: 1,
+    alignItems: "center",
+    paddingTop: 50,
+  },
 });
 
 export default AddNewScreen;

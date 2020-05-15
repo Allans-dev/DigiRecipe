@@ -1,8 +1,11 @@
-const getRecipes: object = async (URL, setRecipes) => {
-  return fetch(URL)
-    .then((res) => res.json())
-    .then((json) => setRecipes(json))
-    .catch((error) => console.error(error));
+const getRecipes: object = async (URL, method, data) => {
+  return fetch(URL, {
+    method: method,
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
+  });
 };
 
 const foodGroups: object[] = [

@@ -11,14 +11,18 @@ import {
 
 const DetailScreen = ({ navigation }) => {
   return (
-    <View>
-      <Text h2>Details Screen</Text>
+    <View style={styles.root}>
+      <Text>Details Screen</Text>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  root: {},
+  root: {
+    flex: 1,
+    alignItems: "center",
+    paddingTop: 50,
+  },
 });
 
 export default DetailScreen;

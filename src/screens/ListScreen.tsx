@@ -11,14 +11,18 @@ import {
 
 const ListScreen = ({ navigation }) => {
   return (
-    <View>
-      <Text h2>List Screen</Text>
+    <View style={styles.root}>
+      <Text>List Screen</Text>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  root: {},
+  root: {
+    flex: 1,
+    alignItems: "center",
+    paddingTop: 50,
+  },
 });
 
 export default ListScreen;

@@ -11,14 +11,18 @@ import {
 
 const AccountScreen = ({ navigation }) => {
   return (
-    <View>
-      <Text h2>Account</Text>
+    <View style={styles.root}>
+      <Text>Account</Text>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  root: {},
+  root: {
+    flex: 1,
+    alignItems: "center",
+    paddingTop: 50,
+  },
 });
 
 export default AccountScreen;
