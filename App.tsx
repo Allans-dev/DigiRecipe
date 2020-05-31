@@ -27,13 +27,13 @@ const App = () => {
 
   useEffect(() => {
     try {
-      async () => {
+      (async () => {
         const token = await AsyncStorage.getItem("token");
+        console.log(token);
         if (token != null) {
           persistedSignin(token);
         }
-        setIsSignedIn(state.token);
-      };
+      })();
     } catch (error) {
       addError("Not in storage, unable to sign in");
     }
