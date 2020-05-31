@@ -1,17 +1,17 @@
-import React, { useState, useContext } from "react";
-import { View, StyleSheet } from "react-native";
+import React, { useState, useContext, useCallback } from "react";
+import { View, StyleSheet, Image } from "react-native";
 import { Text, Button, Input } from "react-native-elements";
+
 import { Context as AuthContext } from "../context/AuthContext.js";
 
-const SignupScreen = ({ navigation }) => {
-  const { state, signup } = useContext(AuthContext);
+const SigninScreen = ({ navigation }) => {
+  const { state, signin } = useContext(AuthContext);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
-
   return (
     <View style={styles.root}>
-      <Text h2>Sign Up</Text>
+      <Text h2>Sign In</Text>
       <Input
         label="Email"
         value={email}
@@ -31,8 +31,7 @@ const SignupScreen = ({ navigation }) => {
       {state.errorMessage ? (
         <Text style={styles.errorMessage}>{state.errorMessage}</Text>
       ) : null}
-      <Button title="Sign Up" onPress={() => signup({ email, password })} />
-      <Button title="Sign in" onPress={() => navigation.navigate("Sign in")} />
+      <Button title="Sign in" onPress={() => signin({ email, password })} />
     </View>
   );
 };
@@ -43,11 +42,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     paddingTop: 50,
   },
-  errorMessage: {
-    color: "red",
-    fontSize: 16,
-    margin: 15,
-  },
 });
 
-export default SignupScreen;
+export default SigninScreen;

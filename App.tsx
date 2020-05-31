@@ -1,5 +1,5 @@
 import "react-native-gesture-handler";
-import React, { useState, useContext } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { StyleSheet, Text, View, Button } from "react-native";
 import { AsyncStorage } from "react-native";
 
@@ -11,40 +11,46 @@ import HomeScreen from "./src/screens/HomeScreen";
 import AddNewScreen from "./src/screens/AddNewScreen";
 import DetailScreen from "./src/screens/DetailScreen";
 import SignupScreen from "./src/screens/SignupScreen";
-import LoginScreen from "./src/screens/LoginScreen";
+import SigninScreen from "./src/screens/SigninScreen";
 import AccountScreen from "./src/screens/AccountScreen";
 import ListScreen from "./src/screens/ListScreen";
 
 import { Provider as AuthProvider } from "./src/context/AuthContext.js";
 import { Context as AuthContext } from "./src/context/AuthContext.js";
 
-const App: React.FC = () => {
+const App = () => {
   const Stack = createStackNavigator();
   const Tab = createBottomTabNavigator();
 
-  const { state } = useContext(AuthContext);
-  const isSignedIn = AsyncStorage.getItem("token");
+  const { state, addError, persistedSignin } = useContext(AuthContext);
+  const [isSignedIn, setIsSignedIn] = useState(false);
+
+  useEffect(() => {
+    try {
+      async () => {
+        const token = await AsyncStorage.getItem("token");
+        if (token != null) {
+          persistedSignin(token);
+        }
+        setIsSignedIn(state.token);
+      };
+    } catch (error) {
+      addError("Not in storage, unable to sign in");
+    }
+  }, []);
 
   const authFlow = () => {
     return (
       <Stack.Navigator>
-        <Stack.Screen
-          name="Sign up"
-          component={SignupScreen}
-          options={{ headerShown: false }}
-        />
-        <Stack.Screen
-          name="Log in"
-          component={LoginScreen}
-          options={{ headerShown: false }}
-        />
+        <Stack.Screen name="Sign up" component={SignupScreen} />
+        <Stack.Screen name="Sign in" component={SigninScreen} />
       </Stack.Navigator>
     );
   };
 
   return (
     <NavigationContainer>
-      {isSignedIn ? (
+      {!!state.token ? (
         <Tab.Navigator>
           <Tab.Screen name="Home" component={HomeScreen} />
           <Tab.Screen name="Add New" component={AddNewScreen} />

@@ -18,7 +18,7 @@ const Recipe = ({ name, ingredients }) => {
   return (
     <View style={styles.recipeItem}>
       <Text>name: {name}</Text>
-      <Text>body: {ingredients}</Text>
+      <Text>Ingredients: {ingredients}</Text>
     </View>
   );
 };
