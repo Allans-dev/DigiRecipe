@@ -8,6 +8,8 @@ const authReducer = (state, action) => {
       return { ...state, errorMessage: action.payload };
     case "authenticate":
       return { errorMessage: "", token: action.payload };
+    case "isLoading":
+      return { ...state, isLoading: action.payload };
     case "signout":
       return { ...state, errorMessage: "", token: null };
     default:
@@ -15,8 +17,13 @@ const authReducer = (state, action) => {
   }
 };
 
+const isLoading = (dispatch) => (bool) => {
+  dispatch({ type: "isLoading", payload: bool });
+};
+
 const signup = (dispatch) => async ({ email, password }) => {
   try {
+    isLoading(true);
     const response = await getRecipes(
       "https://digirecipe-server.herokuapp.com/signup",
       "POST",
@@ -26,6 +33,7 @@ const signup = (dispatch) => async ({ email, password }) => {
     await AsyncStorage.setItem("token", json.token);
     // await AsyncStorage.setItem("userId", json.userId);
     dispatch({ type: "authenticate", payload: json.token });
+    isLoading(false);
   } catch (error) {
     dispatch({
       type: "add_error",
@@ -36,6 +44,7 @@ const signup = (dispatch) => async ({ email, password }) => {
 
 const signin = (dispatch) => async ({ email, password }) => {
   try {
+    isLoading(true);
     const response = await getRecipes(
       "https://digirecipe-server.herokuapp.com/signin",
       "POST",
@@ -45,6 +54,7 @@ const signin = (dispatch) => async ({ email, password }) => {
     await AsyncStorage.setItem("token", json.token);
     // await AsyncStorage.setItem("userId", json.userId);
     dispatch({ type: "authenticate", payload: json.token });
+    isLoading(false);
   } catch (error) {
     dispatch({
       type: "add_error",
@@ -57,7 +67,6 @@ const signout = (dispatch) => async () => {
   await AsyncStorage.removeItem("token");
   await AsyncStorage.removeItem("userId");
   const value = await AsyncStorage.getItem("token");
-  console.log(value);
   dispatch({ type: "signout" });
 };
 
@@ -71,6 +80,6 @@ const persistedSignin = (dispatch) => (token) => {
 
 export const { Provider, Context } = createDataContext(
   authReducer,
-  { signup, signin, signout, addError, persistedSignin },
+  { signup, signin, signout, addError, persistedSignin, isLoading },
   { token: null, errorMessage: "" }
 );

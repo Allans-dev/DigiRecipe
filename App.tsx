@@ -14,6 +14,7 @@ import SignupScreen from "./src/screens/SignupScreen";
 import SigninScreen from "./src/screens/SigninScreen";
 import AccountScreen from "./src/screens/AccountScreen";
 import ListScreen from "./src/screens/ListScreen";
+import LoadingScreen from "./src/screens/LoadingScreen";
 
 import { Provider as AuthProvider } from "./src/context/AuthContext.js";
 import { Context as AuthContext } from "./src/context/AuthContext.js";
@@ -22,17 +23,20 @@ const App = () => {
   const Stack = createStackNavigator();
   const Tab = createBottomTabNavigator();
 
-  const { state, addError, persistedSignin } = useContext(AuthContext);
+  const { state, addError, persistedSignin, isLoading } = useContext(
+    AuthContext
+  );
   const [isSignedIn, setIsSignedIn] = useState(false);
 
   useEffect(() => {
     try {
       (async () => {
+        isLoading(true);
         const token = await AsyncStorage.getItem("token");
-        console.log(token);
         if (token != null) {
           persistedSignin(token);
         }
+        isLoading(false);
       })();
     } catch (error) {
       addError("Not in storage, unable to sign in");
@@ -47,6 +51,10 @@ const App = () => {
       </Stack.Navigator>
     );
   };
+
+  if (!!state.isLoading) {
+    return <LoadingScreen />;
+  }
 
   return (
     <NavigationContainer>
